@@ -4,4 +4,5 @@ f:\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: ファイ�
 f:\opencv\build\include\opencv2\core\utility.hpp : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
 f:\opencv\build\include\opencv2\core\utility.hpp : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
 f:\opencv\build\include\opencv2\imgproc.hpp(591): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+c:\users\daisuke\documents\c++\humandetect\humandetect\humandetect.cpp(61): warning C4101: 'dwErrorMask': ローカル変数は 1 度も使われていません。
   humandetect.vcxproj -> C:\Users\daisuke\Documents\c++\humandetect\x64\Debug\humandetect.exe
