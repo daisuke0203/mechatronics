@@ -49,7 +49,7 @@
 <body>
     <canvas id="canvas"></canvas>
     <div>メカトロ作品発表会</div>
-    <div>A*探索またはダイクストラ法によって最短経路と最短経路木の計算を行います．</div>
+    <div>A*探索またはダイクストラ法によって最短経路（赤）と最短経路木（緑）の計算を行います．</div>
     <ul>
         <li>モデルをクリックするとスタートまたはゴールを選択できます</li>
         <li>マウスでドラッグするかタッチパネル/トラックパッドでスワイプするとモデルを回転できます</li>
@@ -77,12 +77,15 @@
         </div>
     </fieldset>
     <p class="small">
-        このデモプログラムでは3次元表示に<a href="https://threejs.org/">three.js</a>,
+        このプログラムでは3次元表示に<a href="https://threejs.org/">three.js</a>,
         優先順位付きキューに<a href="https://github.com/mourner/tinyqueue">tinyqueue</a>
         を使用しています
     </p>
+    <span id="export-link"></span>
+   
     <script src="three.js"></script>
     <script src="tinyqueue.js"></script>
     <script src="script.js"></script>
+
 </body>
 </html>

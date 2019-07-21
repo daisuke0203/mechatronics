@@ -9,6 +9,9 @@ let intervalID;
 let isShortestPathTreeSearch, isAStarSearch;
 let start, goal;
 let isSearching = false;
+//let total_path = [];
+//let arr = [];
+let flag = false;
 
 // Class to represent a vertex of model
 class Vertex {
@@ -50,8 +53,8 @@ class Model {
 		for (const line of lines) {
 			const s = line.split(" ");
 			if (s[0] === "v") {
-				const x = parseFloat(s[1]) + 0.02;
-				const y = parseFloat(s[2]) - 0.1;
+			    const x = parseFloat(s[1]) ; //parseFloat(s[1])+0.02
+			    const y = parseFloat(s[2]) ;  //parseFloat(s[2])-0.1
 				const z = parseFloat(s[3]);
 
 				vertexArray.push(x, y, z);
@@ -78,7 +81,7 @@ class Model {
 		meshGeometry.setIndex(new THREE.Uint16BufferAttribute(faceArray, 1));
 
 		this.mesh = new THREE.Mesh(meshGeometry, new THREE.MeshBasicMaterial({
-			color: 0x000000,
+			color: 0x000000, //•
 			polygonOffset: true,
 			polygonOffsetFactor: 1,
 			polygonOffsetUnits: 1,
@@ -90,14 +93,14 @@ class Model {
 		lineGeometry.setIndex(new THREE.Uint16BufferAttribute(edgeArray, 1));
 
 		this.backLines = new THREE.LineSegments(lineGeometry, new THREE.LineBasicMaterial({
-			color: 0x404040,
+			color: 0x404040, //•
 			depthFunc: THREE.GreaterDepth,
 			depthWrite: false,
 		}));
 		scene.add(this.backLines);
 
 		this.frontLines = new THREE.LineSegments(lineGeometry, new THREE.LineBasicMaterial({
-			color: 0x808080,
+			color: 0x808080, //ŠD
 		}));
 		scene.add(this.frontLines);
 	}
@@ -139,7 +142,8 @@ class Model {
 
 		return false;
 	}
-
+    //let i=3;
+	//let arr = [];
 	searchStep() {
 		const node = queue.pop();
 
@@ -150,15 +154,71 @@ class Model {
 		node.target.isClosed = true;
 		node.target.previous = node.parent;
 
+		var arr = [];
+		let i=3;
+		
+		
 		if (node.target === goal) {
-			// Reconstruct Path
-			let vertex = goal;
-			while (vertex) {
-				lineBuffer.push(vertex.position);
-				vertex = vertex.previous;
+            alert("in")
+		    // Reconstruct Path
+		    let vertex = goal;
+		  
+		    //let i=0;
+		    arr[0]=goal.position.x;
+		    arr[1]=goal.position.y;
+		    arr[2]=goal.position.z;
+		    while (vertex) {
+		        
+			    lineBuffer.push(vertex.position);
+			    vertex = vertex.previous;
+			    
+			    arr[i] =vertex.position.x ;
+			    arr[i+1] =vertex.position.y ;
+			    arr[i+2] =vertex.position.z ;
+			    i+=3;
+			  
+			    alert(i);
+			 
+			   // alert(arr);
+                
+			    var data = JSON.stringify(arr);
+			    var a = document.createElement('a');
+			    a.textContent = 'export'
+			    a.download = 'tasks.txt';
+			    a.href = window.URL.createObjectURL(new Blob([data], { type: 'text/plain' }));
+			    a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+    
+			    var exportLink = document.getElementById('export-link');
+			    exportLink.appendChild(a)
+		        //total_path.push(vertex);
+                /*alert('nojson')
+                alert(vertex.position.x);
+                alert('yesjson')
+		        alert(JSON.stringify(vertex.position.x));
+                */
+			   // if(i>6) break;
 			}
+			//alert('i'); //o‚È‚¢
 			return true;
 		}
+	    //alert('i'); //o‚é
+		
+		
+		
+    
+		
+		   /* var data = JSON.stringify(arr);
+		    var a = document.createElement('a');
+		    a.textContent = 'export'
+		    a.download = 'tasks.txt';
+		    a.href = window.URL.createObjectURL(new Blob([data], { type: 'text/plain' }));
+		    a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+    
+		    var exportLink = document.getElementById('export-link');
+		    exportLink.appendChild(a);*/
+		
+        
+	    //alert(JSON.stringify(total_path));
 
 		for (const neighbor of node.target.neighbors) {
 			if (neighbor.isClosed) continue;
@@ -171,6 +231,8 @@ class Model {
 			lineSegmentBuffer.push(neighbor.position);
 		}
 	}
+    
+	
 
 	/** @param {THREE.Vector3} */
 	findNearestVertex(pos) {
@@ -184,10 +246,18 @@ class Model {
 				ans = vertex;
 			}
 		}
-
 		return ans;
 	}
 }
+
+
+
+        
+  
+
+
+
+
 
 // Class to render lines
 class LineBuffer {
@@ -243,7 +313,7 @@ class PointsBuffer {
 		this.geometry.setDrawRange(0, 0);
 
 		this.points = new THREE.Points(this.geometry, new THREE.PointsMaterial({
-			color: 0xff0000,
+			color: 0xff0000, //Ô
 			size: 1 / 128,
 			depthTest: false,
 		}));
@@ -268,13 +338,19 @@ class PointsBuffer {
 	}
 }
 
+
+
 function render() {
 	renderer.render(scene, camera);
 };
 
+
+
 function update() {
 	window.requestAnimationFrame(render);
 }
+
+
 
 // Called periodically when in animation
 function intervalFunc() {
@@ -286,7 +362,7 @@ function intervalFunc() {
 			finished = model.searchStep();
 
 		if (finished) {
-			clearInterval(intervalID);
+		    clearInterval(intervalID);
 			isSearching = false;
 			break;
 		}
@@ -339,7 +415,7 @@ function resize() {
 resize();
 window.addEventListener("resize", resize);
 
-new THREE.FileLoader().load("bunny2.obj", text => {
+new THREE.FileLoader().load("untitled.obj", text => {
 	model = new Model(text);
 
 	lineSegmentBuffer = new LineBuffer(THREE.LineSegments, 1 << 14, 0x008000, 0x00ff00);
@@ -352,8 +428,8 @@ new THREE.FileLoader().load("bunny2.obj", text => {
 
 	pointsBuffer = new PointsBuffer();
 	scene.add(pointsBuffer.points);
-
 	update();
+	
 });
 
 let mouseDownX = 0, mouseDownY = 0;
@@ -361,9 +437,10 @@ let hasMouseMoved = false;
 
 canvas.addEventListener("mousedown", ev => {
 	// ignore other than left button is being pressed
-	if (ev.button !== 0) return;
-
+    if (ev.button !== 0) return;
+    
 	mouseDownX = ev.x;
+
 	mouseDownY = ev.y;
 	hasMouseMoved = false;
 });
@@ -400,12 +477,16 @@ canvas.addEventListener("mouseup", ev => {
 	const pos = scene.worldToLocal(result[0].point);
 	const nearest = model.findNearestVertex(pos);
 
+
 	isShortestPathTreeSearch = isShortestPathTreeRadio.checked;
 	isAStarSearch = isAStarSearchRadio.checked;
 	let isReady;
 
+	
+
 	if (isShortestPathTreeSearch) {
-		start = nearest;
+	    start = nearest;
+	    
 		pointsBuffer.setStart(start.position);
 		isReady = true;
 	} else {
@@ -413,10 +494,12 @@ canvas.addEventListener("mouseup", ev => {
 			start = nearest;
 			goal = undefined;
 			pointsBuffer.setStart(start.position);
+			
 			isReady = false;
 		} else {
 			goal = nearest;
 			pointsBuffer.setGoal(goal.position);
+			
 			isReady = true;
 		}
 	}
@@ -439,6 +522,7 @@ canvas.addEventListener("mouseup", ev => {
 
 	update();
 });
+
 
 let prevTouchX = 0, prevTouchY = 0;
 
@@ -487,3 +571,9 @@ canvas.addEventListener("wheel", ev => {
 
 	ev.preventDefault();
 });
+
+
+
+
+
+
